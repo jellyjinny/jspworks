@@ -11,14 +11,12 @@
 	<jsp:include page="./menu.jsp" />
 	<div id="container">
 		<div class="title">
-			<h1>Welcome to our Community.....</h1>
+			<h1>Welcome to our Community...</h1>
 		</div>
 		
 		<div>
 			<img src="./resources/images/coffee-gray.jpg" alt="커피잔">
-		</div>
-		
-	
+		</div>	
 	</div>
 	<jsp:include page="./footer.jsp" />
 </body>

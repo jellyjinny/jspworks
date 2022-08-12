@@ -28,7 +28,7 @@ public class JDBCUtil {
 		if(pstmt != null) {
 			try {
 				pstmt.close();
-			}catch (SQLException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
@@ -41,7 +41,7 @@ public class JDBCUtil {
 		}
 	}
 	
-	//DB 연결 종료 메소드
+	//DB 연결 종료 메소드(ResultSet이 있는 경우)
 	public static void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
 		if(rs != null) {
 			try {
@@ -53,7 +53,7 @@ public class JDBCUtil {
 		if(pstmt != null) {
 			try {
 				pstmt.close();
-			}catch (SQLException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
@@ -64,6 +64,5 @@ public class JDBCUtil {
 				e.printStackTrace();
 			}
 		}
-	}
-}
-		
+	}	
+}	

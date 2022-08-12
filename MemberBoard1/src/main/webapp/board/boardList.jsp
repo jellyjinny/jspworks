@@ -14,16 +14,13 @@
 	<jsp:include page="../menu.jsp" />
 	<div id="container">
 		<div class="title">
-			<h1>게시판 목록</h1>
+			<h1>Board</h1>
 		</div>
 		<div>
 			<table class="tbl_list">
 				<thead>
 					<tr>
-						<th>글번호</th>
-						<th>제목</th>
-						<th>작성일</th>
-						<th>글쓴이</th>
+						<th>글번호</th><th>제목</th><th>작성일</th><th>글쓴이</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -41,12 +38,10 @@
 					<% } %>
 				</tbody>		
 			</table>
-			<div class="btnWrite">
-				<a href="./writeForm.jsp">
-					<button type="button">글쓰기</button>
-				</a>
+			<div class="writeBtn">
+				<a href="./writeForm.jsp"><button type="button">글쓰기</button></a>
 			</div>
-		</div>	
+		</div>
 	</div>
 	<jsp:include page="../footer.jsp" />
 </body>
