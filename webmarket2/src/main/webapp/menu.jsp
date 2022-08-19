@@ -40,7 +40,7 @@
 					<a href="/editProduct.jsp?edit=delete" class="nav-link">상품 삭제</a>
 				</li>
 				<li class="nav-item">
-					<a href="/board/boardList.jsp" class="nav-link">게시판</a>
+					<a href="/boardListAction.do" class="nav-link">게시판</a>
 				</li>
 			</ul>
 		</div>

@@ -1,34 +1,42 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Menu</title>
-</head>
-<body>
-	<nav>
-	<c:choose>
-		<c:when test="${empty sessionId}">
-		<ul>
-			<li><a href="/main.jsp">Home</a></li>
-			<li><a href="/boardList.do">게시판</a></li>
-			<li><a href="/memberForm.do">회원가입</a></li>
-			<li><a href="/loginMember.do">로그인</a></li>
-			<li><a href="/memberList.do">회원목록</a></li>
-		</ul>
-		</c:when>
-		<c:otherwise>
-		<ul>
-			<li><a href="/main.jsp">Home</a></li>
-			<li><a href="/boardList.do">게시판</a></li>
-			<li><a href="/memberView.do">나의 정보</a></li>
-			<li><a href="/logout.do">(<c:out value="${name}" /> 님) 로그아웃</a></li>
-			<li><a href="/memberList.do">회원목록</a></li>
-		</ul>
-		</c:otherwise>
-	</c:choose>
-	</nav>
-</body>
-</html>
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/main.jsp">Home</a>
+		</div>
+		<div>
+			<ul class="navbar-nav">
+			<c:choose>
+				<c:when test="${empty sessionId}">
+					<li class="nav-item">
+						<a href="/loginMember.jsp" class="nav-link">로그인</a>
+					</li>
+					<li class="nav-item">
+						<a href="/memberForm.jsp" class="nav-link">회원가입</a>
+					</li>
+					<li class="nav-item">
+						<a href="/memberList.jsp" class="nav-link">회원목록</a>
+					</li>
+				</c:when>
+				<c:otherwise>
+					<li style="color:#eee; padding-top:7px;">[<c:out value="${sessionId}" />님]</li>
+					<li class="nav-item">
+						<a href="/memberView.jsp" class="nav-link">나의 정보</a>
+					</li>
+					<li class="nav-item">
+						<a href="/logout.jsp" class="nav-link">(<c:out value="${name}" /> 님) 로그아웃</a>
+					</li>
+					<li class="nav-item">
+						<a href="/memberList.jsp" class="nav-link">회원목록</a>
+					</li>
+				</c:otherwise>
+			</c:choose>
+				<li class="nav-item">
+					<a href="/board/boardList.jsp" class="nav-link">게시판</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>

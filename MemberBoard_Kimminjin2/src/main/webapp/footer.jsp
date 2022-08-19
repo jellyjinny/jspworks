@@ -7,7 +7,7 @@
 <title>footer</title>
 </head>
 <body>
-	<footer>
+	<footer class="text-center">
 		&copy; Full Stack Software Engineer : Hi-Media
 	</footer>
 </body>
