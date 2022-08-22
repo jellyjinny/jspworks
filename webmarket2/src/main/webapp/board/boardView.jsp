@@ -42,6 +42,12 @@
 			<div class="form-group row">
 				<div class="col-sm-3">
 					<a href="/boardListAction.do" class="btn btn-primary">목록</a>
+					<c:set var="userId" value="${board.id}" />   <!-- 변수 선언 -->
+					<c:if test="${sessionId eq userId}">
+					<button type="submit" class="btn btn-success">수정</button>
+					<a href="/boardDeleteAction.do?num=<c:out value='${board.num}' />"
+					   class="btn btn-danger">삭제</a>
+					</c:if>
 				</div>
 			</div>
 		</form>

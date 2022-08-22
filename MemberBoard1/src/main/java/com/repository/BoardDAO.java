@@ -10,18 +10,18 @@ import com.common.JDBCUtil;
 
 public class BoardDAO {
 	
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;
+	Connection conn = null;   //db 연결 객체
+	PreparedStatement pstmt = null; //sql 처리
+	ResultSet rs = null;  //반환 자료값 객체
 	
 	//게시글 쓰기
 	public void insertBoard(Board board) {
 		conn = JDBCUtil.getConnection();
-		String sql = "INSERT INTO t_board(bnum, title, content, memberId)"
-				+ " VALUES (b_seq.nextval, ?, ?, ?)";
+		String sql = "INSERT INTO t_board(title, content, memberId)" 
+				+ " VALUES (?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, board.getTitle()); //폼 입력 데이터를 DB에 저장
+			pstmt.setString(1, board.getTitle()); //폼에 입력 데이터를 db에 저장
 			pstmt.setString(2, board.getContent());
 			pstmt.setString(3, board.getMemberId());
 			pstmt.executeUpdate();  //실행 처리
@@ -32,18 +32,40 @@ public class BoardDAO {
 		}
 	}
 	
-	//게시글 목록 보기
-	public ArrayList<Board> getListAll(){
+	//게시글 총 개수
+	public int getBoardCount() {
+		int total = 0;
+		try {
+			conn = JDBCUtil.getConnection();
+			String sql = "select count(*) total from t_board;";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				total = rs.getInt("total");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(conn, pstmt, rs);
+		}
+		
+		return total;
+	}
+
+	//게시글 목록 보기(페이징)
+	public ArrayList<Board> getListAll(int startRow, int pageSize){
 		ArrayList<Board> boardList = new ArrayList<>();
 		
 		try {
 			conn = JDBCUtil.getConnection();
-			String sql = "SELECT * FROM t_board ORDER BY bnum DESC";
+			String sql = "SELECT * FROM t_board ORDER BY bnum DESC LIMIT ?, ?";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startRow-1);  //0번 인덱스에서 시작
+			pstmt.setInt(2, pageSize);    //페이지당 게시글 수
 			rs = pstmt.executeQuery();
-			while(rs.next()) {
+			while(rs.next()) { //반환 자료가 있는 동안
 				Board board = new Board();
-				board.setBnum(rs.getInt("bnum"));
+				board.setBnum(rs.getInt("bnum"));  //db 칼럼을 가져와서 객체에 세팅
 				board.setTitle(rs.getString("title"));
 				board.setContent(rs.getString("content"));
 				board.setRegDate(rs.getDate("regdate"));
@@ -53,33 +75,63 @@ public class BoardDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			JDBCUtil.close(conn,  pstmt, rs);
+			JDBCUtil.close(conn, pstmt, rs);
 		}
+		
 		return boardList;
 	}
+	
+	
+	/*//게시글 목록 보기
+	public ArrayList<Board> getListAll(){
+		ArrayList<Board> boardList = new ArrayList<>();
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			String sql = "SELECT * FROM t_board ORDER BY bnum DESC";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) { //반환 자료가 있는 동안
+				Board board = new Board();
+				board.setBnum(rs.getInt("bnum"));  //db 칼럼을 가져와서 객체에 세팅
+				board.setTitle(rs.getString("title"));
+				board.setContent(rs.getString("content"));
+				board.setRegDate(rs.getDate("regdate"));
+				board.setMemberId(rs.getString("memberId"));
+				boardList.add(board);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(conn, pstmt, rs);
+		}
+		
+		return boardList;
+	}*/
+	
 	
 	//게시글 상세 보기
 	public Board getBoard(int bnum) {
 		Board board = new Board();
-         try {
-            conn= JDBCUtil.getConnection();
-            String sql = "SELECT * FROM t_board WHERE bnum=?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, bnum);
-            rs = pstmt.executeQuery();
-            if(rs.next()) {
-               board.setBnum(rs.getInt("bnum"));
-               board.setTitle(rs.getString("title"));
-               board.setContent(rs.getString("content"));
-               board.setMemberId(rs.getString("memberId"));
-               board.setRegDate(rs.getDate("regdate"));
-            }
-         } catch (SQLException e) {
-            e.printStackTrace();
-         } finally {
-            JDBCUtil.close(conn, pstmt, rs);
-         }
-         return board;
+		try {
+			conn= JDBCUtil.getConnection();
+			String sql = "SELECT * FROM t_board WHERE bnum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bnum);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				board.setBnum(rs.getInt("bnum"));
+				board.setTitle(rs.getString("title"));
+				board.setContent(rs.getString("content"));
+				board.setMemberId(rs.getString("memberId"));
+				board.setRegDate(rs.getDate("regdate"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(conn, pstmt, rs);
+		}
+		return board;
 	}
 	
 	//게시글 삭제
@@ -112,5 +164,6 @@ public class BoardDAO {
 		} finally {
 			JDBCUtil.close(conn, pstmt);
 		}
-	}
-} //boardDAO 닫기
+	}	
+	
+}//boardDAO 닫기
